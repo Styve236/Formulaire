@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Candidature — Bureau Club Robotique</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0b0f14;
+    --bg-panel: #101720;
+    --trace: #1c2a35;
+    --gold: #f5a623;
+    --teal: #00d9b5;
+    --text: #dce4ea;
+    --text-dim: #7c8b98;
+    --danger: #ff5c5c;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 15% 10%, rgba(0,217,181,0.06), transparent 40%),
+      radial-gradient(circle at 85% 85%, rgba(245,166,35,0.05), transparent 45%),
+      var(--bg);
+    color:var(--text);
+    font-family:'JetBrains Mono', monospace;
+    min-height:100vh;
+    line-height:1.5;
+  }
+  .board{
+    max-width:760px;
+    margin:0 auto;
+    padding:56px 24px 80px;
+    position:relative;
+  }
+
+  /* circuit trace background lines */
+  .traces{
+    position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.5;
+  }
+
+  header{position:relative; z-index:1; margin-bottom:48px;}
+  .eyebrow{
+    display:flex; align-items:center; gap:10px;
+    font-size:12px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--teal); margin-bottom:18px;
+  }
+  .eyebrow::before{
+    content:""; width:8px; height:8px; border-radius:50%;
+    background:var(--teal); box-shadow:0 0 8px var(--teal);
+    animation:blink 1.8s infinite ease-in-out;
+  }
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:.25;}}
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:clamp(30px, 5vw, 44px);
+    line-height:1.08;
+    margin:0 0 16px;
+    letter-spacing:-0.01em;
+  }
+  h1 span{color:var(--gold);}
+  .lede{
+    color:var(--text-dim); font-size:15px; max-width:52ch; margin:0 0 28px;
+  }
+  .deadline{
+    display:inline-flex; align-items:baseline; gap:8px;
+    border:1px solid var(--trace); background:var(--bg-panel);
+    padding:10px 16px; border-radius:var(--radius);
+    font-size:13px;
+  }
+  .deadline b{color:var(--danger); font-weight:600;}
+
+  .section-title{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:12px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--text-dim); margin:44px 0 16px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .section-title::after{
+    content:""; flex:1; height:1px; background:var(--trace);
+  }
+
+  .roles{
+    display:grid; grid-template-columns:1fr 1fr; gap:10px;
+    position:relative; z-index:1;
+  }
+  @media (max-width:560px){ .roles{grid-template-columns:1fr;} }
+  .role{
+    border:1px solid var(--trace); background:var(--bg-panel);
+    border-radius:var(--radius); padding:14px 16px;
+    font-size:13px;
+  }
+  .role .pole{color:var(--teal); font-size:11px; text-transform:uppercase; letter-spacing:.08em; display:block; margin-bottom:4px;}
+  .role .name{color:var(--text); font-weight:500;}
+
+  form{position:relative; z-index:1;}
+  .field{margin-bottom:22px;}
+  label{
+    display:block; font-size:12px; color:var(--text-dim);
+    margin-bottom:8px; letter-spacing:.02em;
+  }
+  label b{color:var(--gold); font-weight:500;}
+  input[type=text], select, textarea{
+    width:100%;
+    background:var(--bg-panel);
+    border:1px solid var(--trace);
+    color:var(--text);
+    font-family:'JetBrains Mono', monospace;
+    font-size:14px;
+    padding:12px 14px;
+    border-radius:var(--radius);
+    transition:border-color .15s ease;
+  }
+  input[type=text]:focus, select:focus, textarea:focus{
+    outline:none; border-color:var(--teal);
+  }
+  textarea{resize:vertical; min-height:100px;}
+  .hint{font-size:11px; color:var(--text-dim); margin-top:6px;}
+  .char-count{font-size:11px; color:var(--text-dim); text-align:right; margin-top:4px;}
+
+  .radio-row{display:flex; gap:12px;}
+  .radio-opt{
+    flex:1; border:1px solid var(--trace); background:var(--bg-panel);
+    border-radius:var(--radius); padding:12px 14px;
+    cursor:pointer; display:flex; align-items:center; gap:10px;
+    font-size:14px; transition:border-color .15s ease;
+  }
+  .radio-opt:has(input:checked){ border-color:var(--teal); }
+  .radio-opt input{accent-color:var(--teal);}
+
+  .submit-row{margin-top:36px;}
+  button{
+    width:100%;
+    background:var(--gold);
+    color:#0b0f14;
+    border:none;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:16px 20px;
+    border-radius:var(--radius);
+    cursor:pointer;
+    transition:transform .1s ease, box-shadow .15s ease;
+    letter-spacing:.01em;
+  }
+  button:hover{ box-shadow:0 0 0 3px rgba(245,166,35,0.18); }
+  button:active{ transform:scale(0.99); }
+  button:disabled{ background:var(--trace); color:var(--text-dim); cursor:not-allowed; box-shadow:none; }
+  .submit-note{font-size:12px; color:var(--text-dim); margin-top:10px; text-align:center;}
+
+  .error{color:var(--danger); font-size:12px; margin-top:6px; display:none;}
+  .field.invalid input, .field.invalid select, .field.invalid textarea{border-color:var(--danger);}
+  .field.invalid .error{display:block;}
+
+  footer{
+    position:relative; z-index:1;
+    margin-top:56px; padding-top:24px; border-top:1px solid var(--trace);
+    font-size:11px; color:var(--text-dim); text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<svg class="traces" viewBox="0 0 800 1400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 120 H180 V300 H400" stroke="#16212b" stroke-width="1.5" fill="none"/>
+  <path d="M800 260 H620 V480 H500" stroke="#16212b" stroke-width="1.5" fill="none"/>
+  <path d="M0 700 H120 V860" stroke="#16212b" stroke-width="1.5" fill="none"/>
+  <path d="M800 900 H680 V1100 H780" stroke="#16212b" stroke-width="1.5" fill="none"/>
+  <circle cx="180" cy="120" r="3" fill="#1c2a35"/>
+  <circle cx="400" cy="300" r="3" fill="#1c2a35"/>
+  <circle cx="620" cy="260" r="3" fill="#1c2a35"/>
+  <circle cx="120" cy="700" r="3" fill="#1c2a35"/>
+  <circle cx="680" cy="1100" r="3" fill="#1c2a35"/>
+</svg>
+
+<div class="board">
+
+  <header>
+    <div class="eyebrow">Recrutement bureau 2026–2027</div>
+    <h1>Rejoins le bureau du <span>Club Robotique</span></h1>
+    <p class="lede">Management, gestion de projet, négociation, tech — construis les compétitions et les partenariats de l'année avec nous.</p>
+    <div class="deadline">Dépôt avant le <b>Vendredi 15 Octobre, 23h59</b></div>
+  </header>
+
+  <div class="section-title">Postes ouverts</div>
+  <div class="roles">
+    <div class="role"><span class="pole">Pôle Exécutif</span><span class="name">Vice-Président(e)</span></div>
+    <div class="role"><span class="pole">Pôle Technique</span><span class="name">Directeur(trice) Technique (CTO)</span></div>
+    <div class="role"><span class="pole">Pôle Technique</span><span class="name">Chef(fe) de Projet / Lead Compétition</span></div>
+    <div class="role"><span class="pole">Partenariats</span><span class="name">Responsable Partenariats & Sponsoring</span></div>
+    <div class="role"><span class="pole">Communication</span><span class="name">Responsable Communication & Community Manager</span></div>
+    <div class="role"><span class="pole">Communication</span><span class="name">Designer Visuel</span></div>
+    <div class="role"><span class="pole">Communication</span><span class="name">Responsable Média</span></div>
+  </div>
+
+  <div class="section-title">Ta candidature</div>
+
+  <form id="appForm" novalidate>
+
+    <div class="field" data-field="nom">
+      <label for="nom">Nom & Prénom <b>*</b></label>
+      <input type="text" id="nom" required>
+      <div class="error">Merci de renseigner ton nom et prénom.</div>
+    </div>
+
+    <div class="field" data-field="filiere">
+      <label for="filiere">Filière & Niveau d'étude <b>*</b></label>
+      <input type="text" id="filiere" placeholder="ex : Génie Informatique, Niveau 3" required>
+      <div class="error">Merci de renseigner ta filière et ton niveau.</div>
+    </div>
+
+    <div class="field" data-field="poste1">
+      <label for="poste1">Poste visé — Choix 1 <b>*</b></label>
+      <select id="poste1" required>
+        <option value="" disabled selected>Sélectionner un poste</option>
+        <option>Vice-Président(e)</option>
+        <option>Directeur(trice) Technique (CTO)</option>
+        <option>Chef(fe) de Projet / Lead Compétition</option>
+        <option>Responsable Partenariats & Sponsoring</option>
+        <option>Responsable Communication & Community Manager</option>
+        <option>Designer Visuel</option>
+        <option>Responsable Média</option>
+      </select>
+      <div class="error">Merci de choisir un poste.</div>
+    </div>
+
+    <div class="field" data-field="poste2">
+      <label for="poste2">Poste visé — Choix 2 <span style="color:var(--text-dim)">(optionnel)</span></label>
+      <select id="poste2">
+        <option value="">Aucun</option>
+        <option>Vice-Président(e)</option>
+        <option>Directeur(trice) Technique (CTO)</option>
+        <option>Chef(fe) de Projet / Lead Compétition</option>
+        <option>Responsable Partenariats & Sponsoring</option>
+        <option>Responsable Communication & Community Manager</option>
+        <option>Designer Visuel</option>
+        <option>Responsable Média</option>
+      </select>
+    </div>
+
+    <div class="field" data-field="motivation">
+      <label for="motivation">Tes motivations — Pourquoi toi ? <b>*</b> <span style="color:var(--text-dim)">(3 à 5 lignes)</span></label>
+      <textarea id="motivation" required></textarea>
+      <div class="char-count" id="charCount">0 caractères</div>
+      <div class="error">Merci d'écrire quelques lignes sur tes motivations.</div>
+    </div>
+
+    <div class="field" data-field="dispo">
+      <label>As-tu 4h à 6h par semaine à accorder au club ? <b>*</b></label>
+      <div class="radio-row">
+        <label class="radio-opt"><input type="radio" name="dispo" value="Oui" required> Oui</label>
+        <label class="radio-opt"><input type="radio" name="dispo" value="Non"> Non</label>
+      </div>
+      <div class="error">Merci de répondre à cette question.</div>
+    </div>
+
+    <div class="submit-row">
+      <button type="submit">Envoyer ma candidature via WhatsApp →</button>
+      <p class="submit-note">Le message sera pré-rempli — il te suffira d'appuyer sur envoyer dans WhatsApp.</p>
+    </div>
+
+  </form>
+
+  <footer>Club Robotique — Recrutement bureau 2026–2027</footer>
+
+</div>
+
+<script>
+  const PHONE = "237698730992"; // numéro avec indicatif Cameroun
+
+  const form = document.getElementById('appForm');
+  const motivation = document.getElementById('motivation');
+  const charCount = document.getElementById('charCount');
+
+  motivation.addEventListener('input', () => {
+    charCount.textContent = motivation.value.length + " caractères";
+  });
+
+  function setInvalid(fieldEl, invalid){
+    fieldEl.classList.toggle('invalid', invalid);
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    const nom = document.getElementById('nom').value.trim();
+    const filiere = document.getElementById('filiere').value.trim();
+    const poste1 = document.getElementById('poste1').value;
+    const poste2 = document.getElementById('poste2').value;
+    const motiv = motivation.value.trim();
+    const dispoEl = form.querySelector('input[name="dispo"]:checked');
+    const dispo = dispoEl ? dispoEl.value : "";
+
+    let valid = true;
+
+    const checks = [
+      ['nom', nom.length > 0],
+      ['filiere', filiere.length > 0],
+      ['poste1', poste1.length > 0],
+      ['motivation', motiv.length > 0],
+      ['dispo', dispo.length > 0],
+    ];
+
+    checks.forEach(([key, ok]) => {
+      const fieldEl = form.querySelector('[data-field="' + key + '"]');
+      if(fieldEl){ setInvalid(fieldEl, !ok); }
+      if(!ok) valid = false;
+    });
+
+    if(!dispo){
+      // dispo has no data-field wrapper matched above via key 'dispo' -> field exists, fine
+    }
+
+    if(!valid){
+      const firstInvalid = form.querySelector('.invalid');
+      if(firstInvalid) firstInvalid.scrollIntoView({behavior:'smooth', block:'center'});
+      return;
+    }
+
+    const lines = [
+      "📋 CANDIDATURE BUREAU — CLUB ROBOTIQUE",
+      "",
+      "Nom & Prénom : " + nom,
+      "Filière & Niveau : " + filiere,
+      "Poste visé (Choix 1) : " + poste1,
+      "Poste visé (Choix 2) : " + (poste2 || "—"),
+      "Disponibilité (4-6h/semaine) : " + dispo,
+      "",
+      "Motivations :",
+      motiv
+    ].join("\n");
+
+    const url = "https://wa.me/" + PHONE + "?text=" + encodeURIComponent(lines);
+    window.open(url, "_blank");
+  });
+</script>
+
+</body>
+</html>
